@@ -21,7 +21,8 @@ RUN dotnet publish -c Release -f net10.0 -o /app -r linux-x64 --self-contained f
 WORKDIR /build/src/NzbDrone.Console
 RUN dotnet publish -c Release -f net10.0 -o /app -r linux-x64 --self-contained false \
     -p:TreatWarningsAsErrors=false \
-    -p:RunAnalyzersDuringBuild=false
+    -p:RunAnalyzersDuringBuild=false && \
+    cp -r /build/_output/UI /app/UI
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
