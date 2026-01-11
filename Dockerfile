@@ -20,7 +20,7 @@ RUN dotnet publish -c Release -f net10.0 -o /app -r linux-x64 --self-contained f
     -p:RunAnalyzersDuringBuild=false
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/runtime:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 
 RUN apt-get update && \
