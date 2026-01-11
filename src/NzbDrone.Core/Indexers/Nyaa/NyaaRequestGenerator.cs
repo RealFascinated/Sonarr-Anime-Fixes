@@ -95,6 +95,10 @@ namespace NzbDrone.Core.Indexers.Nyaa
                     // Many anime releases use S2 instead of S02
                     pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
                     pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber}"));
+                    
+                    // Also search for "Season 1" format which is common in release titles
+                    // e.g., "[TTGA] Hamefura-My Next Life as a Villainess: All Routes Lead to Doom! (Season 1) [BD]"
+                    pageableRequests.Add(GetPagedRequests($"{searchTitle}+Season+{searchCriteria.SeasonNumber}"));
                 }
             }
 
