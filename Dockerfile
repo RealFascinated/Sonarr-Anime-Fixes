@@ -15,14 +15,13 @@ COPY src/ ./src/
 RUN dotnet restore src/Sonarr.sln
 COPY --from=frontend /build/_output/UI ./_output/UI
 WORKDIR /build/src/NzbDrone.Mono
-RUN dotnet build -c Release -f net10.0 -r linux-x64 \
+RUN dotnet publish -c Release -f net10.0 -o /app -r linux-x64 --self-contained false \
     -p:TreatWarningsAsErrors=false \
     -p:RunAnalyzersDuringBuild=false
 WORKDIR /build/src/NzbDrone.Console
 RUN dotnet publish -c Release -f net10.0 -o /app -r linux-x64 --self-contained false \
     -p:TreatWarningsAsErrors=false \
     -p:RunAnalyzersDuringBuild=false
-RUN find /build -name "Sonarr.Mono.dll" -type f -exec cp {} /app/ \;
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
