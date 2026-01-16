@@ -38,13 +38,6 @@ RUN apt-get update && \
 
 COPY --from=backend /app .
 
-RUN groupadd -r sonarr && \
-    useradd -r -g sonarr sonarr && \
-    mkdir -p /config && \
-    chown -R sonarr:sonarr /app /config
-
-USER sonarr
-
 EXPOSE 8989
 
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
