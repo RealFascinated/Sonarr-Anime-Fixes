@@ -25,16 +25,14 @@ RUN dotnet publish -c Release -f net10.0 -o /app -r linux-x64 --self-contained f
     cp -r /build/_output/UI /app/UI
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        sqlite3 \
+RUN apk add --no-cache \
+        sqlite-libs \
         mediainfo \
-        libicu-dev \
-        ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+        icu-data-full \
+        ca-certificates
 
 COPY --from=backend /app .
 
