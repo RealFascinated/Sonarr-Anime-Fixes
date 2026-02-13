@@ -61,6 +61,8 @@ namespace NzbDrone.Core.DecisionEngine
         {
             if (reports.Any())
             {
+                // Limit the number of releases to prevent memory exhaustion.
+                // Takes the first N releases which typically come from RSS feeds ordered by publication date (newest first).
                 if (reports.Count > MaximumReleaseCount)
                 {
                     _logger.Warn("Processing only the first {0} releases out of {1} to prevent memory exhaustion", MaximumReleaseCount, reports.Count);
