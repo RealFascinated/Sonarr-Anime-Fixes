@@ -290,7 +290,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             {
                 Encoding = Encoding.UTF8,
                 Indent = true,
-                ConformanceLevel =  ConformanceLevel.Fragment
+                ConformanceLevel = ConformanceLevel.Fragment
             };
 
             using var sw = new Utf8StringWriter();
