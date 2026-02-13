@@ -363,8 +363,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             // Should only process 4000 releases
             Mocker.GetMock<IParsingService>()
-                .Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SearchCriteriaBase>()), 
-                    Times.Exactly(4000));
+                .Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SearchCriteriaBase>()),
+                        Times.Exactly(4000));
         }
     }
 }
