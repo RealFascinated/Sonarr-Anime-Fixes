@@ -23,7 +23,7 @@ namespace NzbDrone.Core.DecisionEngine
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
     {
-        private const int MaximumReleaseCount = 10000;
+        private const int MaximumReleaseCount = 4000;
 
         private readonly IEnumerable<IDownloadDecisionEngineSpecification> _specifications;
         private readonly IParsingService _parsingService;
