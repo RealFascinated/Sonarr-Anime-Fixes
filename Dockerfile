@@ -1,15 +1,16 @@
-# Frontend build
+# Build frontend
 FROM node:20-alpine AS frontend
 WORKDIR /build
-COPY package.json yarn.lock ./
-COPY frontend/ ./frontend/
+COPY package.json yarn.lock* tsconfig.json ./
 RUN yarn install --frozen-lockfile
+COPY frontend ./frontend
 RUN yarn build
 
-# Backend build
+# Build backend
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS backend
 WORKDIR /build
 COPY global.json ./
+COPY Logo ./Logo/
 COPY src/ ./src/
 RUN dotnet restore src/Sonarr.sln
 COPY --from=frontend /build/_output/UI ./_output/UI
@@ -31,10 +32,15 @@ RUN apk add --no-cache \
         sqlite-libs \
         mediainfo \
         icu-data-full \
+        icu-libs \
         ca-certificates
 
 COPY --from=backend /app .
 
 EXPOSE 8989
-VOLUME [ "/config", "/tv" ]
-ENTRYPOINT [ "./Sonarr" ]
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+VOLUME ["/config"]
+
+ENTRYPOINT ["./Sonarr", "-data=/config"]
