@@ -347,5 +347,24 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             result.Should().HaveCount(1);
             result.First().Rejections.First().Message.Should().Contain("12345");
         }
+
+        [Test]
+        public void should_limit_releases_to_4000()
+        {
+            GivenSpecifications(_pass1, _pass2, _pass3);
+
+            _reports = Builder<ReleaseInfo>.CreateListOfSize(5000)
+                .All()
+                .With(r => r.Title = "The.Office.S03E115.DVDRip.XviD-OSiTV")
+                .Build()
+                .ToList();
+
+            var result = Subject.GetRssDecision(_reports);
+
+            // Should only process 4000 releases
+            Mocker.GetMock<IParsingService>()
+                .Verify(c => c.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SearchCriteriaBase>()),
+                        Times.Exactly(4000));
+        }
     }
 }

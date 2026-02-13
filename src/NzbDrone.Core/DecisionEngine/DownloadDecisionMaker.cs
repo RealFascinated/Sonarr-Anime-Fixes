@@ -57,6 +57,13 @@ namespace NzbDrone.Core.DecisionEngine
 
         private IEnumerable<DownloadDecision> GetDecisions(List<ReleaseInfo> reports, bool pushedRelease, SearchCriteriaBase searchCriteria = null)
         {
+            // Limit the number of releases to process to prevent performance issues
+            if (reports.Count > 4000)
+            {
+                _logger.Warn("Too many releases ({0}), limiting to 4000", reports.Count);
+                reports = reports.Take(4000).ToList();
+            }
+
             if (reports.Any())
             {
                 _logger.ProgressInfo("Processing {0} releases", reports.Count);
