@@ -1,10 +1,10 @@
 # Frontend build
 FROM node:20-alpine AS frontend
 WORKDIR /build
-COPY frontend/package*.json ./
-RUN npm ci
-COPY frontend/ ./
-RUN npm run build
+COPY package.json yarn.lock ./
+COPY frontend/ ./frontend/
+RUN yarn install --frozen-lockfile
+RUN yarn build
 
 # Backend build
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS backend
