@@ -349,7 +349,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_limit_releases_to_10000()
+        public void should_limit_releases_to_4000()
         {
             GivenSpecifications(_pass1);
 
@@ -361,15 +361,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var result = Subject.GetRssDecision(_reports);
 
-            result.Should().HaveCount(10000);
+            result.Should().HaveCount(4000);
         }
 
         [Test]
-        public void should_not_limit_releases_under_10000()
+        public void should_not_limit_releases_under_4000()
         {
             GivenSpecifications(_pass1);
 
-            _reports = Builder<ReleaseInfo>.CreateListOfSize(5000)
+            _reports = Builder<ReleaseInfo>.CreateListOfSize(3000)
                 .All()
                 .With(r => r.Title = "The.Office.S03E115.DVDRip.XviD-OSiTV")
                 .Build()
@@ -377,7 +377,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var result = Subject.GetRssDecision(_reports);
 
-            result.Should().HaveCount(5000);
+            result.Should().HaveCount(3000);
         }
     }
 }
