@@ -23,6 +23,8 @@ namespace NzbDrone.Core.DecisionEngine
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
     {
+        private const int MaximumReleaseCount = 10000;
+
         private readonly IEnumerable<IDownloadDecisionEngineSpecification> _specifications;
         private readonly IParsingService _parsingService;
         private readonly ICustomFormatCalculationService _formatCalculator;
@@ -59,6 +61,14 @@ namespace NzbDrone.Core.DecisionEngine
         {
             if (reports.Any())
             {
+                // Limit the number of releases to prevent memory exhaustion.
+                // Takes the first N releases which typically come from RSS feeds ordered by publication date (newest first).
+                if (reports.Count > MaximumReleaseCount)
+                {
+                    _logger.Warn("Processing only the first {0} releases out of {1} to prevent memory exhaustion", MaximumReleaseCount, reports.Count);
+                    reports = reports.Take(MaximumReleaseCount).ToList();
+                }
+
                 _logger.ProgressInfo("Processing {0} releases", reports.Count);
             }
             else

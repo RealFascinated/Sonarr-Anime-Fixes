@@ -347,5 +347,37 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             result.Should().HaveCount(1);
             result.First().Rejections.First().Message.Should().Contain("12345");
         }
+
+        [Test]
+        public void should_limit_releases_to_10000()
+        {
+            GivenSpecifications(_pass1);
+
+            _reports = Builder<ReleaseInfo>.CreateListOfSize(15000)
+                .All()
+                .With(r => r.Title = "The.Office.S03E115.DVDRip.XviD-OSiTV")
+                .Build()
+                .ToList();
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(10000);
+        }
+
+        [Test]
+        public void should_not_limit_releases_under_10000()
+        {
+            GivenSpecifications(_pass1);
+
+            _reports = Builder<ReleaseInfo>.CreateListOfSize(5000)
+                .All()
+                .With(r => r.Title = "The.Office.S03E115.DVDRip.XviD-OSiTV")
+                .Build()
+                .ToList();
+
+            var result = Subject.GetRssDecision(_reports);
+
+            result.Should().HaveCount(5000);
+        }
     }
 }
