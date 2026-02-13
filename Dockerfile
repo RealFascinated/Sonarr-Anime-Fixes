@@ -1,6 +1,6 @@
 FROM node:20-alpine AS frontend
 WORKDIR /build
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock tsconfig.json ./
 COPY frontend/ ./frontend/
 RUN yarn install --frozen-lockfile && yarn build
 
